@@ -1,5 +1,5 @@
 class Lexer
-  KEYWORDS = ["def", "class", "if", "true", "false", "nil"]
+  KEYWORDS = ["def", "class", "if", "true", "false", "nil", "while"]
   
   def tokenize(code)
     code.chomp! 
@@ -28,8 +28,16 @@ class Lexer
         
       elsif string = chunk[/\A"([^"]*)"/, 1]
         tokens << [:STRING, string]
-        i += string.size + 2 # skip two more to exclude the `"`.
-      
+        i += string.size + 2 
+
+      ################
+          #This code will be applied if you want use { } instead of identation to delimiter blocks
+           #elsif chunk.match(/\A\n+/)
+          #  tokens << [:NEWLINE, "\n"]
+          #  i += 1
+
+
+      ################
       elsif indent = chunk[/\A\:\n( +)/m, 1] # Matches ": <newline> <spaces>"
         if indent.size <= current_indent # indent should go up when creating a block
           raise "Bad indent level, got #{indent.size} indents, " +
@@ -43,12 +51,14 @@ class Lexer
       elsif indent = chunk[/\A\n( *)/m, 1] # Matches "<newline> <spaces>"
         if indent.size == current_indent # Case 2
           tokens << [:NEWLINE, "\n"] # Nothing to do, we're still in the same block
+        
         elsif indent.size < current_indent # Case 3
           while indent.size < current_indent
             indent_stack.pop
             current_indent = indent_stack.last || 0
             tokens << [:DEDENT, indent.size]
           end
+
           tokens << [:NEWLINE, "\n"]
         else # indent.size > current_indent, error!
           raise "Missing ':'" # Cannot increase indent level without using ":"
