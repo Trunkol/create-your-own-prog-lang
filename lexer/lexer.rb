@@ -31,13 +31,12 @@ class Lexer
         i += string.size + 2 
 
       ################
-          #This code will be applied if you want use { } instead of identation to delimiter blocks
-           #elsif chunk.match(/\A\n+/)
-          #  tokens << [:NEWLINE, "\n"]
-          #  i += 1
-
-
+          #This code will be applied if you want use { } instead of identation to delimiter block
+            #elsif chunk.match(/\A\n+/)
+            #  tokens << [:NEWLINE, "\n"]
+            #  i += 1
       ################
+
       elsif indent = chunk[/\A\:\n( +)/m, 1] # Matches ": <newline> <spaces>"
         if indent.size <= current_indent # indent should go up when creating a block
           raise "Bad indent level, got #{indent.size} indents, " +
