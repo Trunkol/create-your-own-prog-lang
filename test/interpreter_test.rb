@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'interpreter'
+require 'interpreter/interpreter'
 
 class InterpreterTest < Test::Unit::TestCase
 
