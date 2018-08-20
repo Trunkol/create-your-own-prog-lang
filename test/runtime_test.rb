@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'runtime'
+require 'runtime/runtime'
 
 class RuntimeTest < Test::Unit::TestCase
 
